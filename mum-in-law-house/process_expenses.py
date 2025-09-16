@@ -413,26 +413,124 @@ expenses_data = [
         "amount": 1000,
         "vendor": "Unknown",
     },
+    # September 16, 2025 expenses
+    {
+        "date": "16/09/2025",
+        "category": "Labor Costs",
+        "subcategory": "Specialist Labor",
+        "description": "Welder deposit",
+        "amount": 12000,
+        "vendor": "Welder",
+    },
+    {
+        "date": "16/09/2025",
+        "category": "Hardware Items",
+        "subcategory": "Tools",
+        "description": "Wheelbarrow",
+        "amount": 4350,
+        "vendor": "Hardware Store",
+    },
+    {
+        "date": "16/09/2025",
+        "category": "Hardware Items",
+        "subcategory": "Plumbing",
+        "description": 'Tap 1/2"',
+        "amount": 550,
+        "vendor": "Hardware Store",
+    },
+    {
+        "date": "16/09/2025",
+        "category": "Hardware Items",
+        "subcategory": "Storage",
+        "description": "Blue drum",
+        "amount": 2600,
+        "vendor": "Hardware Store",
+    },
+    {
+        "date": "16/09/2025",
+        "category": "Hardware Items",
+        "subcategory": "Tools",
+        "description": 'Hacksaw 14"',
+        "amount": 280,
+        "vendor": "Hardware Store",
+    },
+    {
+        "date": "16/09/2025",
+        "category": "Building Materials",
+        "subcategory": "Doors & Windows",
+        "description": "Door Frames 6 @ 1200",
+        "amount": 7200,
+        "vendor": "Carpenter",
+    },
+    {
+        "date": "16/09/2025",
+        "category": "Transport & Logistics",
+        "subcategory": "Worker Transport",
+        "description": "Transport for two electricians to voi",
+        "amount": 2700,
+        "vendor": "Transport Service",
+    },
+    # Unpaid labor for 16/09/2025 (tracked separately but included for visibility)
+    {
+        "date": "16/09/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Jack - Daily Labor (UNPAID)",
+        "amount": 2000,
+        "vendor": "Worker",
+    },
+    {
+        "date": "16/09/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Fundi 1 - Daily Labor (UNPAID)",
+        "amount": 1300,
+        "vendor": "Worker",
+    },
+    {
+        "date": "16/09/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Helper 1 - Daily Labor (UNPAID)",
+        "amount": 500,
+        "vendor": "Worker",
+    },
+    {
+        "date": "16/09/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Helper 2 - Daily Labor (UNPAID)",
+        "amount": 500,
+        "vendor": "Worker",
+    },
 ]
 
 # Calculate M-Pesa fees for each expense
 for expense in expenses_data:
-    expense["mpesa_fee"] = calculate_mpesa_fee(expense["amount"])
-    expense["total_cost"] = expense["amount"] + expense["mpesa_fee"]
+    # For unpaid expenses, set M-Pesa fee to 0 and mark as unpaid
+    if "UNPAID" in expense["description"]:
+        expense["mpesa_fee"] = 0.0
+        expense["total_cost"] = 0.0  # Don't count in spending until paid
+        expense["status"] = "unpaid"
+    else:
+        expense["mpesa_fee"] = calculate_mpesa_fee(expense["amount"])
+        expense["total_cost"] = expense["amount"] + expense["mpesa_fee"]
+        expense["status"] = "paid"
 
 # Create DataFrame
 df = pd.DataFrame(expenses_data)
 
-# Calculate summary statistics
-total_spent = df["amount"].sum()
-total_mpesa_fees = df["mpesa_fee"].sum()
-total_cost = df["total_cost"].sum()
+# Calculate summary statistics (only paid expenses)
+paid_df = df[df["status"] == "paid"]
+total_spent = paid_df["amount"].sum()
+total_mpesa_fees = paid_df["mpesa_fee"].sum()
+total_cost = paid_df["total_cost"].sum()
 balance_remaining = TOTAL_BUDGET - total_cost
 percentage_used = (total_cost / TOTAL_BUDGET) * 100
 
-# Category summary
+# Category summary (only paid expenses)
 category_summary = (
-    df.groupby("category")
+    paid_df.groupby("category")
     .agg({"amount": "sum", "mpesa_fee": "sum", "total_cost": "sum"})
     .reset_index()
 )
@@ -445,6 +543,29 @@ category_summary = category_summary.sort_values(
     "budget_percentage", ascending=False
 ).reset_index(drop=True)
 
+# Outstanding balances tracking
+outstanding_balances = [
+    {
+        "vendor": "Welder",
+        "description": "Remaining balance for welding work",
+        "amount": 21000,
+        "due_date": "To be scheduled",
+    }
+]
+
+# Unpaid labor expenses
+unpaid_expenses = [
+    {"date": "16/09/2025", "description": "Jack - Daily Labor", "amount": 2000},
+    {"date": "16/09/2025", "description": "Fundi 1 - Daily Labor", "amount": 1300},
+    {"date": "16/09/2025", "description": "Helper 1 - Daily Labor", "amount": 500},
+    {"date": "16/09/2025", "description": "Helper 2 - Daily Labor", "amount": 500},
+]
+
+# Calculate total outstanding amounts
+total_outstanding = sum(balance["amount"] for balance in outstanding_balances)
+total_unpaid_labor = sum(expense["amount"] for expense in unpaid_expenses)
+total_pending = total_outstanding + total_unpaid_labor
+
 # Print summary for verification
 print("=== MOTHER-IN-LAW HOUSE EXPENSE SUMMARY ===")
 print(f"Date: {PROJECT_START.strftime('%d/%m/%Y')}")
@@ -454,6 +575,12 @@ print(f"M-Pesa Fees: KES {total_mpesa_fees:,}")
 print(f"Total Cost (inc. fees): KES {total_cost:,}")
 print(f"Balance Remaining: KES {balance_remaining:,}")
 print(f"Budget Used: {percentage_used:.2f}%")
+print()
+print("=== OUTSTANDING AMOUNTS ===")
+print(f"Outstanding Balances: KES {total_outstanding:,}")
+print(f"Unpaid Labor: KES {total_unpaid_labor:,}")
+print(f"Total Pending: KES {total_pending:,}")
+print(f"Effective Balance: KES {balance_remaining - total_pending:,}")
 print()
 
 print("=== CATEGORY BREAKDOWN ===")
@@ -473,9 +600,14 @@ dashboard_data = {
         "total_cost": int(total_cost),
         "balance_remaining": int(balance_remaining),
         "percentage_used": round(percentage_used, 2),
+        "total_outstanding": int(total_outstanding),
+        "total_unpaid_labor": int(total_unpaid_labor),
+        "total_pending": int(total_pending),
     },
     "category_summary": category_summary.to_dict("records"),
     "daily_expenses": df.to_dict("records"),
+    "outstanding_balances": outstanding_balances,
+    "unpaid_expenses": unpaid_expenses,
     "last_updated": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
 }
 

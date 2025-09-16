@@ -244,6 +244,26 @@
                 <div class="value" id="mpesaFees">-</div>
                 <div class="currency">KES</div>
             </div>
+            <div class="metric-card">
+                <h3>Outstanding Balances</h3>
+                <div class="value" id="outstandingBalances">-</div>
+                <div class="currency">KES</div>
+            </div>
+            <div class="metric-card">
+                <h3>Unpaid Labor</h3>
+                <div class="value" id="unpaidLabor">-</div>
+                <div class="currency">KES</div>
+            </div>
+            <div class="metric-card">
+                <h3>Total Pending</h3>
+                <div class="value" id="totalPending">-</div>
+                <div class="currency">KES</div>
+            </div>
+            <div class="metric-card">
+                <h3>Effective Balance</h3>
+                <div class="value" id="effectiveBalance">-</div>
+                <div class="currency">KES</div>
+            </div>
         </div>
 
         <div class="chart-section">
@@ -285,6 +305,36 @@
                         <th>M-Pesa Fee</th>
                         <th>Total</th>
                         <th>Vendor</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="table-section">
+            <h3>⚠️ Outstanding Balances</h3>
+            <table id="outstandingTable">
+                <thead>
+                    <tr>
+                        <th>Vendor</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Due Date</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="table-section">
+            <h3>💼 Unpaid Labor</h3>
+            <table id="unpaidTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -357,6 +407,20 @@
             document.getElementById('balanceRemaining').textContent = formatNumber(info.balance_remaining);
             document.getElementById('mpesaFees').textContent = formatNumber(info.total_mpesa_fees);
             
+            // Update outstanding balance metrics
+            if (info.total_outstanding !== undefined) {
+                document.getElementById('outstandingBalances').textContent = formatNumber(info.total_outstanding);
+                document.getElementById('unpaidLabor').textContent = formatNumber(info.total_unpaid_labor);
+                document.getElementById('totalPending').textContent = formatNumber(info.total_pending);
+                document.getElementById('effectiveBalance').textContent = formatNumber(info.balance_remaining - info.total_pending);
+            } else {
+                // Fallback for older data without outstanding balance tracking
+                document.getElementById('outstandingBalances').textContent = "0";
+                document.getElementById('unpaidLabor').textContent = "0";
+                document.getElementById('totalPending').textContent = "0";
+                document.getElementById('effectiveBalance').textContent = formatNumber(info.balance_remaining);
+            }
+            
             // Update progress bar
             const progressPercent = info.percentage_used;
             document.getElementById('budgetProgress').style.width = progressPercent + '%';
@@ -372,6 +436,8 @@
             // Update tables
             updateCategoryTable();
             updateTransactionTable();
+            updateOutstandingTable();
+            updateUnpaidTable();
         }
 
         // Format number with commas
@@ -487,14 +553,59 @@
             const recentTransactions = expenseData.daily_expenses.slice(0, 10);
             
             recentTransactions.forEach(transaction => {
+                const status = transaction.status || 'paid';
+                const isUnpaid = status === 'unpaid';
+                const rowClass = isUnpaid ? 'style="background-color: #ffebee; color: #c62828;"' : '';
+                const statusBadge = isUnpaid ? '<span style="background-color: #f44336; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8em;">UNPAID</span>' : '<span style="background-color: #4caf50; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8em;">PAID</span>';
+                
                 const row = `
-                    <tr>
+                    <tr ${rowClass}>
                         <td><span class="category-tag">${transaction.category}</span></td>
                         <td>${transaction.description}</td>
                         <td class="amount">KES ${formatNumber(transaction.amount)}</td>
                         <td class="amount">KES ${formatNumber(transaction.mpesa_fee)}</td>
                         <td class="amount">KES ${formatNumber(transaction.total_cost)}</td>
-                        <td>${transaction.vendor}</td>
+                        <td>${transaction.vendor} ${statusBadge}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // Update outstanding balances table
+        function updateOutstandingTable() {
+            if (!expenseData || !expenseData.outstanding_balances) return;
+            
+            const tbody = document.querySelector('#outstandingTable tbody');
+            tbody.innerHTML = '';
+            
+            expenseData.outstanding_balances.forEach(balance => {
+                const row = `
+                    <tr>
+                        <td>${balance.vendor}</td>
+                        <td>${balance.description}</td>
+                        <td class="amount">KES ${formatNumber(balance.amount)}</td>
+                        <td>${balance.due_date}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // Update unpaid labor table
+        function updateUnpaidTable() {
+            if (!expenseData || !expenseData.unpaid_expenses) return;
+            
+            const tbody = document.querySelector('#unpaidTable tbody');
+            tbody.innerHTML = '';
+            
+            expenseData.unpaid_expenses.forEach(expense => {
+                const row = `
+                    <tr>
+                        <td>${expense.date}</td>
+                        <td>${expense.description}</td>
+                        <td class="amount">KES ${formatNumber(expense.amount)}</td>
+                        <td><span style="color: #e74c3c; font-weight: bold;">Pending</span></td>
                     </tr>
                 `;
                 tbody.innerHTML += row;

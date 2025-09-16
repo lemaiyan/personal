@@ -21,6 +21,8 @@ summary_sheet = wb.create_sheet("Home Summary")
 daily_sheet = wb.create_sheet("Daily Expenses")
 category_sheet = wb.create_sheet("Category Analysis")
 mpesa_sheet = wb.create_sheet("M-Pesa Fees")
+outstanding_sheet = wb.create_sheet("Outstanding Balances")
+unpaid_sheet = wb.create_sheet("Unpaid Labor")
 
 # Define styles
 header_font = Font(bold=True, size=12, color="FFFFFF")
@@ -58,20 +60,41 @@ ws["B7"] = f"{project_info['percentage_used']}%"
 ws["A8"] = "M-Pesa Fees:"
 ws["B8"] = f"KES {project_info['total_mpesa_fees']:,}"
 
-# Category summary
-ws["A10"] = "Category Breakdown"
+# Outstanding amounts section
+ws["A10"] = "Outstanding Amounts"
 ws["A10"].font = title_font
+
+if "total_outstanding" in project_info:
+    ws["A11"] = "Outstanding Balances:"
+    ws["B11"] = f"KES {project_info['total_outstanding']:,}"
+    ws["A12"] = "Unpaid Labor:"
+    ws["B12"] = f"KES {project_info['total_unpaid_labor']:,}"
+    ws["A13"] = "Total Pending:"
+    ws["B13"] = f"KES {project_info['total_pending']:,}"
+    ws["A14"] = "Effective Balance:"
+    ws["B14"] = (
+        f"KES {project_info['balance_remaining'] - project_info['total_pending']:,}"
+    )
+
+    category_start_row = 16
+else:
+    category_start_row = 11
+
+# Category summary
+ws[f"A{category_start_row}"] = "Category Breakdown"
+ws[f"A{category_start_row}"].font = title_font
 
 # Headers
 headers = ["Category", "Amount Spent", "M-Pesa Fees", "Total Cost", "Budget %"]
+header_row = category_start_row + 1
 for col, header in enumerate(headers, 1):
-    cell = ws.cell(row=11, column=col, value=header)
+    cell = ws.cell(row=header_row, column=col, value=header)
     cell.font = header_font
     cell.fill = header_fill
     cell.border = border
 
 # Category data
-for row, category in enumerate(data["category_summary"], 12):
+for row, category in enumerate(data["category_summary"], header_row + 1):
     ws.cell(row=row, column=1, value=category["category"]).border = border
     ws.cell(row=row, column=2, value=category["amount"]).border = border
     ws.cell(row=row, column=3, value=category["mpesa_fee"]).border = border
@@ -99,6 +122,7 @@ expense_headers = [
     "M-Pesa Fee",
     "Total Cost",
     "Vendor",
+    "Status",
 ]
 for col, header in enumerate(expense_headers, 1):
     cell = ws.cell(row=1, column=col, value=header)
@@ -116,9 +140,24 @@ for row, expense in enumerate(data["daily_expenses"], 2):
     ws.cell(row=row, column=6, value=expense["mpesa_fee"]).border = border
     ws.cell(row=row, column=7, value=expense["total_cost"]).border = border
     ws.cell(row=row, column=8, value=expense["vendor"]).border = border
+    
+    # Status column and highlighting for unpaid items
+    status = expense.get("status", "paid")
+    status_cell = ws.cell(row=row, column=9, value=status.upper())
+    status_cell.border = border
+    
+    if status == "unpaid":
+        # Highlight unpaid rows in light red
+        unpaid_fill = PatternFill(start_color="FFCCCC", end_color="FFCCCC", fill_type="solid")
+        unpaid_font = Font(color="CC0000", bold=True)
+        for col in range(1, 10):
+            cell = ws.cell(row=row, column=col)
+            cell.fill = unpaid_fill
+            if col == 9:  # Status column
+                cell.font = unpaid_font
 
 # Adjust column widths
-for col in ["A", "B", "C", "D", "E", "F", "G", "H"]:
+for col in ["A", "B", "C", "D", "E", "F", "G", "H", "I"]:
     ws.column_dimensions[col].width = 18
 
 # === M-PESA FEES SHEET ===
@@ -190,9 +229,89 @@ ws[f"A{row+2}"] = "Total M-Pesa Fees:"
 ws[f"B{row+2}"] = f"KES {project_info['total_mpesa_fees']:,}"
 ws[f"B{row+2}"].font = Font(bold=True)
 
+# === OUTSTANDING BALANCES SHEET ===
+ws = outstanding_sheet
+
+# Title
+ws["A1"] = "OUTSTANDING BALANCES"
+ws["A1"].font = Font(bold=True, size=16, color="2C5F2D")
+ws.merge_cells("A1:D1")
+
+# Headers
+headers = ["Vendor", "Description", "Amount", "Due Date"]
+for col, header in enumerate(headers, 1):
+    cell = ws.cell(row=3, column=col, value=header)
+    cell.font = header_font
+    cell.fill = header_fill
+    cell.border = border
+
+# Data
+if "outstanding_balances" in data:
+    for row, balance in enumerate(data["outstanding_balances"], 4):
+        ws.cell(row=row, column=1, value=balance["vendor"]).border = border
+        ws.cell(row=row, column=2, value=balance["description"]).border = border
+        ws.cell(row=row, column=3, value=balance["amount"]).border = border
+        ws.cell(row=row, column=4, value=balance["due_date"]).border = border
+
+# Total
+if "outstanding_balances" in data:
+    total_row = len(data["outstanding_balances"]) + 5
+    ws[f"A{total_row}"] = "Total Outstanding:"
+    ws[f"A{total_row}"].font = Font(bold=True)
+    ws[f"C{total_row}"] = f"KES {project_info.get('total_outstanding', 0):,}"
+    ws[f"C{total_row}"].font = Font(bold=True)
+
+# Adjust column widths
+ws.column_dimensions["A"].width = 20
+ws.column_dimensions["B"].width = 40
+ws.column_dimensions["C"].width = 15
+ws.column_dimensions["D"].width = 20
+
+# === UNPAID LABOR SHEET ===
+ws = unpaid_sheet
+
+# Title
+ws["A1"] = "UNPAID LABOR EXPENSES"
+ws["A1"].font = Font(bold=True, size=16, color="2C5F2D")
+ws.merge_cells("A1:D1")
+
+# Headers
+headers = ["Date", "Description", "Amount", "Status"]
+for col, header in enumerate(headers, 1):
+    cell = ws.cell(row=3, column=col, value=header)
+    cell.font = header_font
+    cell.fill = header_fill
+    cell.border = border
+
+# Data
+if "unpaid_expenses" in data:
+    for row, expense in enumerate(data["unpaid_expenses"], 4):
+        ws.cell(row=row, column=1, value=expense["date"]).border = border
+        ws.cell(row=row, column=2, value=expense["description"]).border = border
+        ws.cell(row=row, column=3, value=expense["amount"]).border = border
+        ws.cell(row=row, column=4, value="PENDING").border = border
+        # Highlight pending status in red
+        ws.cell(row=row, column=4).font = Font(color="E74C3C", bold=True)
+
+# Total
+if "unpaid_expenses" in data:
+    total_row = len(data["unpaid_expenses"]) + 5
+    ws[f"A{total_row}"] = "Total Unpaid Labor:"
+    ws[f"A{total_row}"].font = Font(bold=True)
+    ws[f"C{total_row}"] = f"KES {project_info.get('total_unpaid_labor', 0):,}"
+    ws[f"C{total_row}"].font = Font(bold=True)
+
+# Adjust column widths
+ws.column_dimensions["A"].width = 15
+ws.column_dimensions["B"].width = 30
+ws.column_dimensions["C"].width = 15
+ws.column_dimensions["D"].width = 15
+
 # Save the Excel file
 wb.save(
     "/Users/lemaiyan/dev/personal/mum-in-law-house/Mother-In-Law-House-Expenses.xlsx"
 )
 print("Excel file created: Mother-In-Law-House-Expenses.xlsx")
-print("Sheets created: Home Summary, Daily Expenses, Category Analysis, M-Pesa Fees")
+print(
+    "Sheets created: Home Summary, Daily Expenses, Category Analysis, M-Pesa Fees, Outstanding Balances, Unpaid Labor"
+)
