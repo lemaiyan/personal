@@ -140,15 +140,17 @@ for row, expense in enumerate(data["daily_expenses"], 2):
     ws.cell(row=row, column=6, value=expense["mpesa_fee"]).border = border
     ws.cell(row=row, column=7, value=expense["total_cost"]).border = border
     ws.cell(row=row, column=8, value=expense["vendor"]).border = border
-    
+
     # Status column and highlighting for unpaid items
     status = expense.get("status", "paid")
     status_cell = ws.cell(row=row, column=9, value=status.upper())
     status_cell.border = border
-    
+
     if status == "unpaid":
         # Highlight unpaid rows in light red
-        unpaid_fill = PatternFill(start_color="FFCCCC", end_color="FFCCCC", fill_type="solid")
+        unpaid_fill = PatternFill(
+            start_color="FFCCCC", end_color="FFCCCC", fill_type="solid"
+        )
         unpaid_font = Font(color="CC0000", bold=True)
         for col in range(1, 10):
             cell = ws.cell(row=row, column=col)
