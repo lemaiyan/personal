@@ -260,6 +260,16 @@
                 <div class="currency">KES</div>
             </div>
             <div class="metric-card">
+                <h3>Total Committed</h3>
+                <div class="value" id="totalCommitted">-</div>
+                <div class="currency">KES</div>
+            </div>
+            <div class="metric-card">
+                <h3>Budget Used (Inclusive)</h3>
+                <div class="value" id="budgetUsedInclusive">-</div>
+                <div class="currency">%</div>
+            </div>
+            <div class="metric-card">
                 <h3>Effective Balance</h3>
                 <div class="value" id="effectiveBalance">-</div>
                 <div class="currency">KES</div>
@@ -412,19 +422,36 @@
                 document.getElementById('outstandingBalances').textContent = formatNumber(info.total_outstanding);
                 document.getElementById('unpaidLabor').textContent = formatNumber(info.total_unpaid_labor);
                 document.getElementById('totalPending').textContent = formatNumber(info.total_pending);
-                document.getElementById('effectiveBalance').textContent = formatNumber(info.balance_remaining - info.total_pending);
+                document.getElementById('totalCommitted').textContent = formatNumber(info.total_committed || (info.total_cost + info.total_pending));
+                document.getElementById('budgetUsedInclusive').textContent = (info.percentage_used_inclusive || 0).toFixed(2);
+                document.getElementById('effectiveBalance').textContent = formatNumber(info.effective_balance || (info.balance_remaining - info.total_pending));
             } else {
                 // Fallback for older data without outstanding balance tracking
                 document.getElementById('outstandingBalances').textContent = "0";
                 document.getElementById('unpaidLabor').textContent = "0";
                 document.getElementById('totalPending').textContent = "0";
+                document.getElementById('totalCommitted').textContent = formatNumber(info.total_cost);
+                document.getElementById('budgetUsedInclusive').textContent = info.percentage_used.toFixed(2);
                 document.getElementById('effectiveBalance').textContent = formatNumber(info.balance_remaining);
             }
             
-            // Update progress bar
-            const progressPercent = info.percentage_used;
+            // Update progress bar (use inclusive percentage if available)
+            const progressPercent = info.percentage_used_inclusive || info.percentage_used;
+            const progressLabel = info.percentage_used_inclusive ? 'committed (paid + pending)' : 'spent (paid only)';
             document.getElementById('budgetProgress').style.width = progressPercent + '%';
-            document.getElementById('progressText').textContent = `${progressPercent}% of budget used`;
+            document.getElementById('progressText').textContent = `${progressPercent.toFixed(2)}% of budget ${progressLabel}`;
+            
+            // Change progress bar color based on percentage
+            const progressBar = document.getElementById('budgetProgress');
+            if (progressPercent >= 90) {
+                progressBar.style.background = 'linear-gradient(45deg, #e74c3c, #c0392b)'; // Red
+            } else if (progressPercent >= 75) {
+                progressBar.style.background = 'linear-gradient(45deg, #f39c12, #e67e22)'; // Orange
+            } else if (progressPercent >= 50) {
+                progressBar.style.background = 'linear-gradient(45deg, #f1c40f, #f39c12)'; // Yellow
+            } else {
+                progressBar.style.background = 'linear-gradient(45deg, #2ecc71, #27ae60)'; // Green
+            }
             
             // Update last updated
             document.getElementById('lastUpdated').textContent = expenseData.last_updated;

@@ -71,12 +71,18 @@ if "total_outstanding" in project_info:
     ws["B12"] = f"KES {project_info['total_unpaid_labor']:,}"
     ws["A13"] = "Total Pending:"
     ws["B13"] = f"KES {project_info['total_pending']:,}"
-    ws["A14"] = "Effective Balance:"
+    ws["A14"] = "Total Committed:"
     ws["B14"] = (
-        f"KES {project_info['balance_remaining'] - project_info['total_pending']:,}"
+        f"KES {project_info.get('total_committed', project_info['total_cost'] + project_info['total_pending']):,}"
+    )
+    ws["A15"] = "Budget Used (Inclusive):"
+    ws["B15"] = f"{project_info.get('percentage_used_inclusive', 0):.2f}%"
+    ws["A16"] = "Effective Balance:"
+    ws["B16"] = (
+        f"KES {project_info.get('effective_balance', project_info['balance_remaining'] - project_info['total_pending']):,}"
     )
 
-    category_start_row = 16
+    category_start_row = 18
 else:
     category_start_row = 11
 
