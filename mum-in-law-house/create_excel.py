@@ -7,7 +7,9 @@ from openpyxl.chart import BarChart, PieChart, Reference
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 
 # Load the processed data
-with open("/Users/lemaiyan/dev/personal/mum-in-law-house/expense_data.json", "r") as f:
+with open(
+    "/Users/lemaiyan/dev/all/personal/mum-in-law-house/expense_data.json", "r"
+) as f:
     data = json.load(f)
 
 # Create Excel workbook
@@ -317,7 +319,7 @@ ws.column_dimensions["D"].width = 15
 
 # Save the Excel file
 wb.save(
-    "/Users/lemaiyan/dev/personal/mum-in-law-house/Mother-In-Law-House-Expenses.xlsx"
+    "/Users/lemaiyan/dev/all/personal/mum-in-law-house/Mother-In-Law-House-Expenses.xlsx"
 )
 print("Excel file created: Mother-In-Law-House-Expenses.xlsx")
 print(

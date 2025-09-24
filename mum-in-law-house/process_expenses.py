@@ -1696,6 +1696,103 @@ expenses_data = [
         "amount": 600,
         "vendor": "Worker",
     },
+    # September 24, 2025 expenses
+    {
+        "date": "24/09/2025",
+        "category": "Utilities & Services",
+        "subcategory": "Water Connection",
+        "description": "Water connection",
+        "amount": 5100,
+        "vendor": "Water Company",
+    },
+    {
+        "date": "24/09/2025",
+        "category": "Hardware Items",
+        "subcategory": "Tools & Supplies",
+        "description": "Rope",
+        "amount": 620,
+        "vendor": "Hardware Store",
+    },
+    {
+        "date": "24/09/2025",
+        "category": "Hardware Items",
+        "subcategory": "Roofing Materials",
+        "description": "2kg roofing nails @ 300 each",
+        "amount": 600,
+        "vendor": "Hardware Store",
+    },
+    {
+        "date": "24/09/2025",
+        "category": "Hardware Items",
+        "subcategory": "Roofing Materials",
+        "description": "2 packets roofing rubbers @ 100 each",
+        "amount": 200,
+        "vendor": "Hardware Store",
+    },
+    {
+        "date": "24/09/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Fundi 1 - UNPAID",
+        "amount": 1300,
+        "vendor": "Worker",
+    },
+    {
+        "date": "24/09/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Fundi 2 - UNPAID",
+        "amount": 1300,
+        "vendor": "Worker",
+    },
+    {
+        "date": "24/09/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Fundi 3 - UNPAID",
+        "amount": 1300,
+        "vendor": "Worker",
+    },
+    {
+        "date": "24/09/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Jack - UNPAID",
+        "amount": 1500,
+        "vendor": "Worker",
+    },
+    {
+        "date": "24/09/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Helper 1 - UNPAID",
+        "amount": 600,
+        "vendor": "Worker",
+    },
+    {
+        "date": "24/09/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Helper 2 - UNPAID",
+        "amount": 600,
+        "vendor": "Worker",
+    },
+    {
+        "date": "24/09/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Helper 3 - UNPAID",
+        "amount": 600,
+        "vendor": "Worker",
+    },
+    {
+        "date": "24/09/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Helper 4 - UNPAID",
+        "amount": 600,
+        "vendor": "Worker",
+    },
 ]
 
 # Calculate M-Pesa fees for each expense
@@ -1725,9 +1822,9 @@ percentage_used = (total_cost / TOTAL_BUDGET) * 100
 outstanding_balances = [
     {
         "vendor": "Welder",
-        "description": "Remaining balance for welding work (26000 of 48000)",
-        "amount": 26000,
-        "due_date": "To be scheduled",
+        "description": "Remaining balance for welding work (18000 of 40000)",
+        "amount": 18000,
+        "due_date": "24/09/2025",
     },
     {
         "vendor": "Excavation Worker",
@@ -1777,6 +1874,14 @@ unpaid_expenses = [
     {"date": "23/09/2025", "description": "Helper 1 - Daily Labor", "amount": 600},
     {"date": "23/09/2025", "description": "Helper 2 - Daily Labor", "amount": 600},
     {"date": "23/09/2025", "description": "Helper 3 - Daily Labor", "amount": 600},
+    {"date": "24/09/2025", "description": "Fundi 1 - Daily Labor", "amount": 1300},
+    {"date": "24/09/2025", "description": "Fundi 2 - Daily Labor", "amount": 1300},
+    {"date": "24/09/2025", "description": "Fundi 3 - Daily Labor", "amount": 1300},
+    {"date": "24/09/2025", "description": "Jack - Daily Labor", "amount": 1500},
+    {"date": "24/09/2025", "description": "Helper 1 - Daily Labor", "amount": 600},
+    {"date": "24/09/2025", "description": "Helper 2 - Daily Labor", "amount": 600},
+    {"date": "24/09/2025", "description": "Helper 3 - Daily Labor", "amount": 600},
+    {"date": "24/09/2025", "description": "Helper 4 - Daily Labor", "amount": 600},
 ]
 
 total_outstanding = sum(balance["amount"] for balance in outstanding_balances)
@@ -1858,11 +1963,13 @@ dashboard_data = {
     "daily_expenses": df.to_dict("records"),
     "outstanding_balances": outstanding_balances,
     "unpaid_expenses": unpaid_expenses,
-    "last_updated": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+    "last_updated": "24/09/2025 12:00:00",
 }
 
 # Save data for HTML dashboard
-with open("/Users/lemaiyan/dev/personal/mum-in-law-house/expense_data.json", "w") as f:
+with open(
+    "/Users/lemaiyan/dev/all/personal/mum-in-law-house/expense_data.json", "w"
+) as f:
     json.dump(dashboard_data, f, indent=2)
 
 print(f"\nData exported for HTML dashboard: {len(df)} transactions processed")
