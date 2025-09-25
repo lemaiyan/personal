@@ -2028,19 +2028,27 @@ expenses_data = [
     },
     {
         "date": "25/09/2025",
+        "category": "Miscellaneous",
+        "subcategory": "Not used for the project",
+        "description": "Money that has been taken out for personal use.",
+        "amount": 77045.50,
+        "vendor": "Self",
+    },
+    {
+        "date": "24/09/2025",
         "category": "Labor Costs",
-        "subcategory": "Labor Payment",
-        "description": "Payment of all accumulated unpaid labor",
-        "amount": 52600,
-        "vendor": "Workers",
+        "subcategory": "Specialized Labor",
+        "description": "Welder - final balance payment (18000 of 40000 total)",
+        "amount": 18000,
+        "vendor": "Welder",
     },
     {
         "date": "25/09/2025",
-        "category": "Miscellaneous",
-        "subcategory": "Transaction Fees",
-        "description": "M-Pesa processing fees for labor payments",
-        "amount": 500,
-        "vendor": "M-Pesa",
+        "category": "Labor Costs",
+        "subcategory": "Specialized Labor",
+        "description": "Excavation Worker - final balance payment (6400 of 16000 total)",
+        "amount": 6400,
+        "vendor": "Excavation Worker",
     },
 ]
 
@@ -2069,18 +2077,6 @@ percentage_used = (total_cost / TOTAL_BUDGET) * 100
 
 # Calculate total outstanding amounts (moved earlier for calculations)
 outstanding_balances = [
-    {
-        "vendor": "Welder",
-        "description": "Remaining balance for welding work (18000 of 40000)",
-        "amount": 18000,
-        "due_date": "24/09/2025",
-    },
-    {
-        "vendor": "Excavation Worker",
-        "description": "Remaining balance for septic tank digging (6400 of 16000)",
-        "amount": 6400,
-        "due_date": "To be scheduled",
-    },
     {
         "vendor": "Electrician",
         "description": "Remaining balance for electrical work (18000 of 28000)",
