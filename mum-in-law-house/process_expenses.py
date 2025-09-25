@@ -2030,7 +2030,7 @@ expenses_data = [
         "date": "25/09/2025",
         "category": "Miscellaneous",
         "subcategory": "Not used for the project",
-        "description": "Money that has been taken out for personal use.",
+        "description": "Money taken for personal use and potential overcharges or unaccounted expenses.",
         "amount": 77045.50,
         "vendor": "Self",
     },
