@@ -2426,6 +2426,47 @@ expenses_data = [
         "amount": 2400,
         "vendor": "Worker",
     },
+    # Friday 03/10/2025 labor - UNPAID
+    {
+        "date": "03/10/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Jack - UNPAID",
+        "amount": 1500,
+        "vendor": "Worker",
+    },
+    {
+        "date": "03/10/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Fundi 1 - UNPAID",
+        "amount": 1300,
+        "vendor": "Worker",
+    },
+    {
+        "date": "03/10/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Fundi 2 - UNPAID",
+        "amount": 1300,
+        "vendor": "Worker",
+    },
+    {
+        "date": "03/10/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Fundi 3 - UNPAID",
+        "amount": 1300,
+        "vendor": "Worker",
+    },
+    {
+        "date": "03/10/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "3 helpers @ 600 each - UNPAID",
+        "amount": 1800,
+        "vendor": "Worker",
+    },
 ]
 
 # Calculate M-Pesa fees for each expense
