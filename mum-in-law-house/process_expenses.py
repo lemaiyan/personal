@@ -7,7 +7,7 @@ import pandas as pd
 # Create comprehensive expense tracking system for Mother-in-Law House
 
 # Project constants
-TOTAL_BUDGET = 1_000_000  # KES
+TOTAL_BUDGET = 1_300_000  # KES
 PROJECT_START = datetime(2025, 9, 15)
 
 
