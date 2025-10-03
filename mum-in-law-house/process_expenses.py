@@ -2344,6 +2344,15 @@ expenses_data = [
         "amount": 1800,
         "vendor": "Worker",
     },
+    # Tuesday 30/09/2025 utilities - UNPAID
+    {
+        "date": "30/09/2025",
+        "category": "Utilities",
+        "subcategory": "Water",
+        "description": "Water - UNPAID",
+        "amount": 1200,
+        "vendor": "Supplier",
+    },
     # Wednesday 01/10/2025 labor - UNPAID
     {
         "date": "01/10/2025",
