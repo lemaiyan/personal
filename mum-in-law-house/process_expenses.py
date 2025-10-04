@@ -2325,7 +2325,7 @@ expenses_data = [
         "category": "Labor Costs",
         "subcategory": "Daily Labor",
         "description": "Fundi 3",
-        "amount": 1200,
+        "amount": 1300,
         "vendor": "Worker",
     },
     {
@@ -2495,6 +2495,14 @@ expenses_data = [
         "vendor": "Worker",
     },
     # Friday 04/10/2025 labor
+    {
+        "date": "04/10/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Jack",
+        "amount": 1500,
+        "vendor": "Worker",
+    },
     {
         "date": "04/10/2025",
         "category": "Labor Costs",
