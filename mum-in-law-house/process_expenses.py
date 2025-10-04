@@ -2390,8 +2390,8 @@ expenses_data = [
         "date": "01/10/2025",
         "category": "Labor Costs",
         "subcategory": "Daily Labor",
-        "description": "3 helpers @ 800 each - UNPAID",
-        "amount": 2400,
+        "description": "3 helpers @ 600 each - UNPAID",
+        "amount": 1800,
         "vendor": "Worker",
     },
     # Thursday 02/10/2025 labor - UNPAID
@@ -2431,9 +2431,27 @@ expenses_data = [
         "date": "02/10/2025",
         "category": "Labor Costs",
         "subcategory": "Daily Labor",
-        "description": "3 helpers @ 800 each - UNPAID",
-        "amount": 2400,
+        "description": "3 helpers @ 600 each - UNPAID",
+        "amount": 1800,
         "vendor": "Worker",
+    },
+    # Thursday 02/10/2025 supplies
+    {
+        "date": "02/10/2025",
+        "category": "Workers Accommodation",
+        "subcategory": "Food Supplies",
+        "description": "Unga and cooking oil for workers",
+        "amount": 2700,
+        "vendor": "Supplier",
+    },
+    # Thursday 02/10/2025 provisions
+    {
+        "date": "02/10/2025",
+        "category": "Workers Accommodation",
+        "subcategory": "Food",
+        "description": "Unga and cooking oil for workers",
+        "amount": 2700,
+        "vendor": "Supplier",
     },
     # Friday 03/10/2025 labor - UNPAID
     {
