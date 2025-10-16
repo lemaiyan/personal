@@ -3318,6 +3318,15 @@ expenses_data = [
         "amount": 1800,
         "vendor": "Worker",
     },
+    # Tuesday 14/10/2025 workers food
+    {
+        "date": "14/10/2025",
+        "category": "Workers Accommodation",
+        "subcategory": "Food",
+        "description": "Workers food",
+        "amount": 2700,
+        "vendor": "Supplier",
+    },
     # Wednesday 15/10/2025 labor - UNPAID
     {
         "date": "15/10/2025",
@@ -3358,6 +3367,15 @@ expenses_data = [
         "description": "3 helpers @ 600 each - UNPAID",
         "amount": 1800,
         "vendor": "Worker",
+    },
+    # Wednesday 15/10/2025 worker accommodation
+    {
+        "date": "15/10/2025",
+        "category": "Workers Accommodation",
+        "subcategory": "Accommodation",
+        "description": "Worker accommodation",
+        "amount": 4100,
+        "vendor": "Accommodation Provider",
     },
     # Thursday 16/10/2025 labor - UNPAID
     {
