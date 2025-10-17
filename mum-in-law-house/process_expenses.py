@@ -46,6 +46,15 @@ def calculate_mpesa_fee(amount):
 
 # September 15, 2025 expenses
 expenses_data = [
+    # Project offering at the beginning
+    {
+        "date": "15/09/2025",
+        "category": "Miscellaneous",
+        "subcategory": "Religious/Spiritual",
+        "description": "Project offering at beginning",
+        "amount": 10000,
+        "vendor": "Church/Religious Institution",
+    },
     # Transport & Logistics
     {
         "date": "15/09/2025",
