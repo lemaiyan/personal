@@ -3713,6 +3713,15 @@ expenses_data = [
         "amount": 1800,
         "vendor": "Worker",
     },
+    # Saturday 18/10/2025 transport - UNPAID
+    {
+        "date": "18/10/2025",
+        "category": "Transport & Logistics",
+        "subcategory": "Transport",
+        "description": "Transport - UNPAID",
+        "amount": 600,
+        "vendor": "Transport Service",
+    },
 ]
 
 # Calculate M-Pesa fees for each expense
