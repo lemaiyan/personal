@@ -3816,6 +3816,72 @@ expenses_data = [
         "amount": 10000,
         "vendor": "Cabinet Specialist",
     },
+    # Tuesday 21/10/2025 labor - UNPAID
+    {
+        "date": "21/10/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Jack - UNPAID",
+        "amount": 1500,
+        "vendor": "Worker",
+    },
+    {
+        "date": "21/10/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Fundi 1 - UNPAID",
+        "amount": 1300,
+        "vendor": "Worker",
+    },
+    {
+        "date": "21/10/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "Fundi 2 - UNPAID",
+        "amount": 1300,
+        "vendor": "Worker",
+    },
+    {
+        "date": "21/10/2025",
+        "category": "Labor Costs",
+        "subcategory": "Daily Labor",
+        "description": "2 helpers @ 600 each - UNPAID",
+        "amount": 1200,
+        "vendor": "Worker",
+    },
+    # Tuesday 21/10/2025 building materials
+    {
+        "date": "21/10/2025",
+        "category": "Building Materials",
+        "subcategory": "Finishing Materials",
+        "description": "17ft faceboard 8X1 @ 90",
+        "amount": 1530,
+        "vendor": "Hardware Store",
+    },
+    {
+        "date": "21/10/2025",
+        "category": "Building Materials",
+        "subcategory": "Ceiling Materials",
+        "description": "6 ceiling board 9mm @ 1050",
+        "amount": 6300,
+        "vendor": "Hardware Store",
+    },
+    {
+        "date": "21/10/2025",
+        "category": "Building Materials",
+        "subcategory": "Finishing Materials",
+        "description": "8 pcs Aluminium corners strip gold @ 250",
+        "amount": 2000,
+        "vendor": "Hardware Store",
+    },
+    {
+        "date": "21/10/2025",
+        "category": "Building Materials",
+        "subcategory": "Ceiling Materials",
+        "description": "Spacers 2.5mm 4 packets @ 100",
+        "amount": 400,
+        "vendor": "Hardware Store",
+    },
 ]
 
 # Calculate M-Pesa fees for each expense
@@ -4040,7 +4106,9 @@ print("=== PENDING ITEMS (Not Yet Paid/Bought) ===")
 total_not_yet_paid = total_pending + total_pending_purchases_with_contingency
 print(f"Outstanding Balances (Specialist Work):  KES {total_outstanding:,}")
 print(f"Unpaid Labor (Daily Workers):            KES {total_unpaid_labor:,}")
-print(f"Pending Purchases (Items to Buy):        KES {total_pending_purchases_with_contingency:,}")
+print(
+    f"Pending Purchases (Items to Buy):        KES {total_pending_purchases_with_contingency:,}"
+)
 print(f"{'─'*50}")
 print(f"TOTAL PENDING (Not Yet Paid/Bought):     KES {total_not_yet_paid:,}")
 print()
@@ -4063,7 +4131,9 @@ print(f"  • Outstanding Balances:     KES {total_outstanding:,}")
 print(f"  • Unpaid Labor:             KES {total_unpaid_labor:,}")
 print(f"  • Pending Purchases:        KES {total_pending_purchases_with_contingency:,}")
 print(f"  ─────────────────────────────────────────────")
-print(f"  Total Breakdown:            KES {total_outstanding + total_unpaid_labor + total_pending_purchases_with_contingency:,}")
+print(
+    f"  Total Breakdown:            KES {total_outstanding + total_unpaid_labor + total_pending_purchases_with_contingency:,}"
+)
 print()
 print(f"Total Over Budget: {((additional_funds_needed / TOTAL_BUDGET) * 100):.2f}%")
 print(f"{'='*50}")
@@ -4086,7 +4156,9 @@ dashboard_data = {
         "total_committed": int(total_committed),
         "effective_balance": int(effective_balance),
         "total_pending_purchases": int(total_pending_purchases_with_contingency),
-        "total_not_yet_paid": int(total_pending + total_pending_purchases_with_contingency),
+        "total_not_yet_paid": int(
+            total_pending + total_pending_purchases_with_contingency
+        ),
         "total_project_cost": int(total_project_cost),
         "additional_funds_needed": int(additional_funds_needed),
     },
