@@ -25,6 +25,7 @@ category_sheet = wb.create_sheet("Category Analysis")
 mpesa_sheet = wb.create_sheet("M-Pesa Fees")
 outstanding_sheet = wb.create_sheet("Outstanding Balances")
 unpaid_sheet = wb.create_sheet("Unpaid Labor")
+pending_purchases_sheet = wb.create_sheet("Pending Purchases")
 
 # Define styles
 header_font = Font(bold=True, size=12, color="FFFFFF")
@@ -85,6 +86,21 @@ if "total_outstanding" in project_info:
     )
 
     category_start_row = 18
+
+    # Add Project Completion Estimate if pending purchases exist
+    if "total_pending_purchases" in project_info:
+        ws["A18"] = "Project Completion Estimate"
+        ws["A18"].font = title_font
+        ws["A19"] = "Pending Purchases:"
+        ws["B19"] = f"KES {project_info['total_pending_purchases']:,}"
+        ws["A20"] = "Total Project Cost:"
+        ws["B20"] = f"KES {project_info['total_project_cost']:,}"
+        ws["B20"].font = Font(bold=True, size=12, color="E74C3C")
+        ws["A21"] = "Additional Funds Needed:"
+        ws["B21"] = f"KES {project_info['additional_funds_needed']:,}"
+        ws["B21"].font = Font(bold=True, size=12, color="E74C3C")
+
+        category_start_row = 23
 else:
     category_start_row = 11
 
@@ -317,11 +333,80 @@ ws.column_dimensions["B"].width = 30
 ws.column_dimensions["C"].width = 15
 ws.column_dimensions["D"].width = 15
 
+# === PENDING PURCHASES SHEET ===
+ws = pending_purchases_sheet
+
+# Title
+ws["A1"] = "PENDING PURCHASES (Not Yet Procured)"
+ws["A1"].font = Font(bold=True, size=16, color="2C5F2D")
+ws.merge_cells("A1:C1")
+
+# Headers
+headers = ["Category", "Description", "Amount"]
+for col, header in enumerate(headers, 1):
+    cell = ws.cell(row=3, column=col, value=header)
+    cell.font = header_font
+    cell.fill = header_fill
+    cell.border = border
+
+# Data
+if "pending_purchases" in data:
+    for row, purchase in enumerate(data["pending_purchases"], 4):
+        ws.cell(row=row, column=1, value=purchase["category"]).border = border
+        ws.cell(row=row, column=2, value=purchase["description"]).border = border
+        ws.cell(row=row, column=3, value=purchase["amount"]).border = border
+
+        # Highlight contingency row in different color
+        if "Contingency" in purchase.get("category", ""):
+            ws.cell(row=row, column=1).fill = PatternFill(
+                start_color="FFF3CD", end_color="FFF3CD", fill_type="solid"
+            )
+            ws.cell(row=row, column=2).fill = PatternFill(
+                start_color="FFF3CD", end_color="FFF3CD", fill_type="solid"
+            )
+            ws.cell(row=row, column=3).fill = PatternFill(
+                start_color="FFF3CD", end_color="FFF3CD", fill_type="solid"
+            )
+
+    # Total
+    total_row = len(data["pending_purchases"]) + 5
+    ws[f"A{total_row}"] = "Total Pending Purchases:"
+    ws[f"A{total_row}"].font = Font(bold=True)
+    ws[f"C{total_row}"] = f"KES {project_info.get('total_pending_purchases', 0):,}"
+    ws[f"C{total_row}"].font = Font(bold=True, size=12, color="E74C3C")
+
+    # Add breakdown summary
+    ws[f"A{total_row+2}"] = "SUMMARY:"
+    ws[f"A{total_row+2}"].font = Font(bold=True, size=12, color="2C5F2D")
+    ws[f"A{total_row+3}"] = "1. Already Spent (Paid):"
+    ws[f"B{total_row+3}"] = f"KES {project_info['total_cost']:,}"
+    ws[f"A{total_row+4}"] = "2. Outstanding Balances:"
+    ws[f"B{total_row+4}"] = f"KES {project_info['total_outstanding']:,}"
+    ws[f"A{total_row+5}"] = "3. Unpaid Labor:"
+    ws[f"B{total_row+5}"] = f"KES {project_info['total_unpaid_labor']:,}"
+    ws[f"A{total_row+6}"] = "4. Pending Purchases:"
+    ws[f"B{total_row+6}"] = f"KES {project_info['total_pending_purchases']:,}"
+    ws[f"A{total_row+8}"] = "TOTAL PROJECT COST:"
+    ws[f"A{total_row+8}"].font = Font(bold=True, size=14, color="E74C3C")
+    ws[f"B{total_row+8}"] = f"KES {project_info['total_project_cost']:,}"
+    ws[f"B{total_row+8}"].font = Font(bold=True, size=14, color="E74C3C")
+    ws[f"A{total_row+9}"] = "Current Budget:"
+    ws[f"B{total_row+9}"] = f"KES {project_info['total_budget']:,}"
+    ws[f"A{total_row+10}"] = "Additional Funds Needed:"
+    ws[f"A{total_row+10}"].font = Font(bold=True, size=12, color="C0392B")
+    ws[f"B{total_row+10}"] = f"KES {project_info['additional_funds_needed']:,}"
+    ws[f"B{total_row+10}"].font = Font(bold=True, size=12, color="C0392B")
+
+# Adjust column widths
+ws.column_dimensions["A"].width = 30
+ws.column_dimensions["B"].width = 60
+ws.column_dimensions["C"].width = 15
+
 # Save the Excel file
 wb.save(
     "/Users/lemaiyan/dev/all/personal/mum-in-law-house/Mother-In-Law-House-Expenses.xlsx"
 )
 print("Excel file created: Mother-In-Law-House-Expenses.xlsx")
 print(
-    "Sheets created: Home Summary, Daily Expenses, Category Analysis, M-Pesa Fees, Outstanding Balances, Unpaid Labor"
+    "Sheets created: Home Summary, Daily Expenses, Category Analysis, M-Pesa Fees, Outstanding Balances, Unpaid Labor, Pending Purchases"
 )
