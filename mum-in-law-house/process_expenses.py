@@ -3917,6 +3917,93 @@ category_summary = category_summary.sort_values(
     "budget_percentage", ascending=False
 ).reset_index(drop=True)
 
+# Pending purchases/items not yet procured
+pending_purchases = [
+    {
+        "category": "Plumbing & Fixtures",
+        "description": "Toilets and mirrors",
+        "amount": 25000,
+    },
+    {
+        "category": "Electrical",
+        "description": "Pending electrical equipment",
+        "amount": 30000,
+    },
+    {
+        "category": "Finishing & Decoration",
+        "description": "Cornis",
+        "amount": 15000,
+    },
+    {
+        "category": "Paint",
+        "description": "4 ltrs silk Lagoon",
+        "amount": 3000,
+    },
+    {
+        "category": "Paint",
+        "description": "20 ltrs silk Ivory",
+        "amount": 14700,
+    },
+    {
+        "category": "Paint",
+        "description": "4 ltrs silk grey",
+        "amount": 3000,
+    },
+    {
+        "category": "Paint - Outside",
+        "description": "4 ltrs Aquatech white",
+        "amount": 3200,
+    },
+    {
+        "category": "Paint - Outside",
+        "description": "4 ltrs gloss black",
+        "amount": 1200,
+    },
+    {
+        "category": "Paint - Outside",
+        "description": "4 ltrs weatherguard ivory",
+        "amount": 3200,
+    },
+    {
+        "category": "Paint - Outside",
+        "description": "6 @ 4 ltrs weatherguard silicone @ 3200 each",
+        "amount": 19200,
+    },
+    {
+        "category": "Construction Work",
+        "description": "Veranda works and other pending concrete work",
+        "amount": 30000,
+    },
+]
+
+# Calculate total pending purchases
+total_pending_purchases = sum(item["amount"] for item in pending_purchases)
+
+# Calculate miscellaneous contingency (15% of pending purchases + outstanding balances)
+# Based on project history: ~6% has been miscellaneous/unexpected costs
+# For safety, recommend 15% contingency for remaining work
+contingency_base = total_pending_purchases + total_outstanding + total_unpaid_labor
+miscellaneous_estimate = int(contingency_base * 0.15)
+
+pending_purchases.append(
+    {
+        "category": "Miscellaneous & Contingency",
+        "description": "Estimated miscellaneous costs (15% of remaining work) - includes transport, food, accommodation, unexpected items",
+        "amount": miscellaneous_estimate,
+    }
+)
+
+# Recalculate with contingency
+total_pending_purchases_with_contingency = (
+    total_pending_purchases + miscellaneous_estimate
+)
+
+# Calculate project completion estimates
+total_project_cost = (
+    total_cost + total_pending + total_pending_purchases_with_contingency
+)
+additional_funds_needed = total_project_cost - TOTAL_BUDGET
+
 # Print summary for verification
 print("=== MOTHER-IN-LAW HOUSE EXPENSE SUMMARY ===")
 print(f"Date: {PROJECT_START.strftime('%d/%m/%Y')}")
@@ -3942,6 +4029,27 @@ for _, row in category_summary.iterrows():
         f"{row['category']}: KES {row['total_cost']:,} (Amount: {row['amount']:,} + Fees: {row['mpesa_fee']:,})"
     )
 
+print()
+print("=== PENDING PURCHASES (Not Yet Procured) ===")
+for item in pending_purchases:
+    print(f"{item['category']}: {item['description']} - KES {item['amount']:,}")
+print(f"\nTotal Pending Purchases: KES {total_pending_purchases_with_contingency:,}")
+
+print()
+print("=== PROJECT COMPLETION ESTIMATE ===")
+print(f"1. Already Spent (Paid): KES {total_cost:,}")
+print(f"2. Outstanding Balances: KES {total_outstanding:,}")
+print(f"3. Unpaid Labor: KES {total_unpaid_labor:,}")
+print(f"4. Pending Purchases: KES {total_pending_purchases_with_contingency:,}")
+print(f"   - Items to buy: KES {total_pending_purchases:,}")
+print(f"   - Contingency (15%): KES {miscellaneous_estimate:,}")
+print(f"\n{'='*50}")
+print(f"TOTAL ESTIMATED PROJECT COST: KES {total_project_cost:,}")
+print(f"Current Budget: KES {TOTAL_BUDGET:,}")
+print(f"Additional Funds Needed: KES {additional_funds_needed:,}")
+print(f"Total Over Budget: {((additional_funds_needed / TOTAL_BUDGET) * 100):.2f}%")
+print(f"{'='*50}")
+
 # Export data for HTML dashboard
 dashboard_data = {
     "project_info": {
@@ -3959,11 +4067,15 @@ dashboard_data = {
         "total_pending": int(total_pending),
         "total_committed": int(total_committed),
         "effective_balance": int(effective_balance),
+        "total_pending_purchases": int(total_pending_purchases_with_contingency),
+        "total_project_cost": int(total_project_cost),
+        "additional_funds_needed": int(additional_funds_needed),
     },
     "category_summary": category_summary.to_dict("records"),
     "daily_expenses": df.to_dict("records"),
     "outstanding_balances": outstanding_balances,
     "unpaid_expenses": unpaid_expenses,
+    "pending_purchases": pending_purchases,
     "last_updated": "24/09/2025 12:00:00",
 }
 
