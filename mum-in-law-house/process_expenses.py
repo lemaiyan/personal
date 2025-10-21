@@ -8,7 +8,7 @@ import pandas as pd
 
 # Project constants
 TOTAL_BUDGET = (
-    1_490_000  # KES - Updated budget (original 1,300,000 + additional 190,000)
+    1_000_000  # KES - Original budget (to show true picture of budget overrun)
 )
 PROJECT_START = datetime(2025, 9, 15)
 
@@ -4036,6 +4036,15 @@ for item in pending_purchases:
 print(f"\nTotal Pending Purchases: KES {total_pending_purchases_with_contingency:,}")
 
 print()
+print("=== PENDING ITEMS (Not Yet Paid/Bought) ===")
+total_not_yet_paid = total_pending + total_pending_purchases_with_contingency
+print(f"Outstanding Balances (Specialist Work):  KES {total_outstanding:,}")
+print(f"Unpaid Labor (Daily Workers):            KES {total_unpaid_labor:,}")
+print(f"Pending Purchases (Items to Buy):        KES {total_pending_purchases_with_contingency:,}")
+print(f"{'─'*50}")
+print(f"TOTAL PENDING (Not Yet Paid/Bought):     KES {total_not_yet_paid:,}")
+print()
+
 print("=== PROJECT COMPLETION ESTIMATE ===")
 print(f"1. Already Spent (Paid): KES {total_cost:,}")
 print(f"2. Outstanding Balances: KES {total_outstanding:,}")
@@ -4046,7 +4055,16 @@ print(f"   - Contingency (15%): KES {miscellaneous_estimate:,}")
 print(f"\n{'='*50}")
 print(f"TOTAL ESTIMATED PROJECT COST: KES {total_project_cost:,}")
 print(f"Current Budget: KES {TOTAL_BUDGET:,}")
-print(f"Additional Funds Needed: KES {additional_funds_needed:,}")
+print(f"Already Over Budget (Spent): KES {total_cost - TOTAL_BUDGET:,}")
+print()
+print(f"ADDITIONAL FUNDS NEEDED: KES {additional_funds_needed:,}")
+print(f"  Breakdown:")
+print(f"  • Outstanding Balances:     KES {total_outstanding:,}")
+print(f"  • Unpaid Labor:             KES {total_unpaid_labor:,}")
+print(f"  • Pending Purchases:        KES {total_pending_purchases_with_contingency:,}")
+print(f"  ─────────────────────────────────────────────")
+print(f"  Total Breakdown:            KES {total_outstanding + total_unpaid_labor + total_pending_purchases_with_contingency:,}")
+print()
 print(f"Total Over Budget: {((additional_funds_needed / TOTAL_BUDGET) * 100):.2f}%")
 print(f"{'='*50}")
 
@@ -4068,6 +4086,7 @@ dashboard_data = {
         "total_committed": int(total_committed),
         "effective_balance": int(effective_balance),
         "total_pending_purchases": int(total_pending_purchases_with_contingency),
+        "total_not_yet_paid": int(total_pending + total_pending_purchases_with_contingency),
         "total_project_cost": int(total_project_cost),
         "additional_funds_needed": int(additional_funds_needed),
     },
