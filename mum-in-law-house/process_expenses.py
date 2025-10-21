@@ -3816,30 +3816,6 @@ expenses_data = [
         "amount": 10000,
         "vendor": "Cabinet Specialist",
     },
-    {
-        "date": "20/10/2025",
-        "category": "Furniture & Fixtures",
-        "subcategory": "Cabinet Work",
-        "description": "Additional work - fixing 6 doors @ 500 each - UNPAID",
-        "amount": 3000,
-        "vendor": "Cabinet Specialist",
-    },
-    {
-        "date": "20/10/2025",
-        "category": "Furniture & Fixtures",
-        "subcategory": "Cabinet Work",
-        "description": "Additional work - 9 curtain rods @ 200 each - UNPAID",
-        "amount": 1800,
-        "vendor": "Cabinet Specialist",
-    },
-    {
-        "date": "20/10/2025",
-        "category": "Furniture & Fixtures",
-        "subcategory": "Cabinet Work",
-        "description": "Tip for cabinet specialist - UNPAID",
-        "amount": 500,
-        "vendor": "Cabinet Specialist",
-    },
 ]
 
 # Calculate M-Pesa fees for each expense
