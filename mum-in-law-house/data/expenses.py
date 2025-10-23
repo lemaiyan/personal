@@ -3958,4 +3958,12 @@ def get_expenses_data():
             "amount": 2150,
             "vendor": "Hardware Store",
         },
+        {
+            "date": "23/10/2025",
+            "category": "Labor Costs",
+            "subcategory": "Specialist Work",
+            "description": "Payment for painting work",
+            "amount": 10000,
+            "vendor": "Painter",
+        },
     ]

@@ -27,8 +27,8 @@ def get_outstanding_balances():
         },
         {
             "vendor": "Painter",
-            "description": "Painting work - 30000",
-            "amount": 30000,
+            "description": "Painting work - 30000, paid 10000 on 23/10 = 20000 remaining",
+            "amount": 20000,
             "due_date": "To be scheduled",
         },
         {
