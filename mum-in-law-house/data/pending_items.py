@@ -64,11 +64,6 @@ def get_pending_purchases():
             "amount": 30000,
         },
         {
-            "category": "Finishing & Decoration",
-            "description": "Cornis",
-            "amount": 15000,
-        },
-        {
             "category": "Paint",
             "description": "4 ltrs silk Lagoon",
             "amount": 3000,

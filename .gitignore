@@ -205,3 +205,4 @@ yarn-error.log*
 .env.production.local
 secrets.txt
 config.local.*
+process_expenses_old.py
