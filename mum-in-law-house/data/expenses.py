@@ -3950,4 +3950,12 @@ def get_expenses_data():
             "amount": 300,
             "vendor": "Hardware Store",
         },
+        {
+            "date": "23/10/2025",
+            "category": "Building Materials",
+            "subcategory": "Finishing Materials",
+            "description": "1 bag gypsum filler @ 2150",
+            "amount": 2150,
+            "vendor": "Hardware Store",
+        },
     ]
