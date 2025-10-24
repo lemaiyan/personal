@@ -3966,4 +3966,13 @@ def get_expenses_data():
             "amount": 10000,
             "vendor": "Painter",
         },
+        # Thursday 24/10/2025 building materials
+        {
+            "date": "24/10/2025",
+            "category": "Building Materials",
+            "subcategory": "Cement & Concrete",
+            "description": "15 bags Simba cement @ 720",
+            "amount": 10800,
+            "vendor": "Hardware Store",
+        },
     ]
