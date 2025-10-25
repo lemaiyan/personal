@@ -4083,4 +4083,12 @@ def get_expenses_data():
             "amount": 11300,
             "vendor": "Cabinet Specialist",
         },
+        {
+            "date": "25/10/2025",
+            "category": "Labor Costs",
+            "subcategory": "Specialist Work",
+            "description": "Payment for tiling labor",
+            "amount": 14170,
+            "vendor": "Tile Fixer",
+        },
     ]

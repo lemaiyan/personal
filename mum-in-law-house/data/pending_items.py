@@ -39,8 +39,8 @@ def get_outstanding_balances():
         },
         {
             "vendor": "Tile Fixer",
-            "description": "Fixing tiles - 30000",
-            "amount": 30000,
+            "description": "Fixing tiles - 30000, paid 14170 on 25/10 = 15830 remaining",
+            "amount": 15830,
             "due_date": "To be scheduled",
         },
     ]
