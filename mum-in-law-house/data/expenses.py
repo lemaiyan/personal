@@ -4046,7 +4046,7 @@ def get_expenses_data():
             "category": "Transport & Logistics",
             "subcategory": "Worker Transport",
             "description": "Transport - UNPAID",
-            "amount": 600,
+            "amount": 1200,
             "vendor": "Local Transport",
         },
         # Friday 25/10/2025 building materials
