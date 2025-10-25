@@ -27,15 +27,15 @@ def get_outstanding_balances():
         },
         {
             "vendor": "Painter",
-            "description": "Painting work - 30000, paid 10000 on 23/10 = 20000 remaining",
-            "amount": 20000,
+            "description": "Painting work - 33000, paid 10000 on 23/10 + 7000 on 25/10 = 16000 remaining",
+            "amount": 16000,
             "due_date": "To be scheduled",
         },
         {
             "vendor": "Cabinet Specialist",
-            "description": "Original 16000 + unpaid work (3000 doors + 1800 curtain rods + 500 tip), paid 10000 down = 11300 remaining",
-            "amount": 11300,
-            "due_date": "To be scheduled",
+            "description": "Original 16000 + unpaid work (3000 doors + 1800 curtain rods + 500 tip), paid 10000 down + 11300 final = 0 remaining",
+            "amount": 0,
+            "due_date": "Completed",
         },
         {
             "vendor": "Tile Fixer",
