@@ -33,9 +33,9 @@ def get_outstanding_balances():
         },
         {
             "vendor": "Cabinet Specialist",
-            "description": "Original 16000 + unpaid work (3000 doors + 1800 curtain rods + 500 tip), paid 10000 down + 11300 final = 0 remaining",
-            "amount": 0,
-            "due_date": "Completed",
+            "description": "Original work paid (21300 total), additional cabinets added = 7500 remaining",
+            "amount": 7500,
+            "due_date": "To be scheduled",
         },
         {
             "vendor": "Tile Fixer",
