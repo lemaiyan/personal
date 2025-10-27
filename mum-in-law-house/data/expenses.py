@@ -4469,4 +4469,12 @@ def get_expenses_data():
             "amount": 1200,
             "vendor": "Timber Supplier",
         },
+        {
+            "date": "27/10/2025",
+            "category": "Finishing & Decoration",
+            "subcategory": "Plumbing Fixtures",
+            "description": "2 toilets @ 12500 each",
+            "amount": 25000,
+            "vendor": "Plumbing Supplier",
+        },
     ]

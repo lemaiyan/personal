@@ -55,8 +55,8 @@ def get_pending_purchases():
     return [
         {
             "category": "Plumbing & Fixtures",
-            "description": "Toilets and mirrors",
-            "amount": 25000,
+            "description": "Mirrors only (toilets purchased)",
+            "amount": 0,
         },
         {
             "category": "Paint",
