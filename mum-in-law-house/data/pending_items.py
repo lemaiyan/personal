@@ -59,11 +59,6 @@ def get_pending_purchases():
             "amount": 25000,
         },
         {
-            "category": "Electrical",
-            "description": "Pending electrical equipment",
-            "amount": 30000,
-        },
-        {
             "category": "Paint",
             "description": "4 ltrs silk Lagoon",
             "amount": 3000,

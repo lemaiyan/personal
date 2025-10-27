@@ -186,6 +186,100 @@ for row, expense in enumerate(data["daily_expenses"], 2):
 for col in ["A", "B", "C", "D", "E", "F", "G", "H", "I"]:
     ws.column_dimensions[col].width = 18
 
+# === CATEGORY ANALYSIS SHEET ===
+ws = category_sheet
+
+ws["A1"] = "EXPENSE CATEGORY ANALYSIS"
+ws["A1"].font = Font(bold=True, size=16, color="2C5F2D")
+ws.merge_cells("A1:H1")
+
+# Category summary table
+ws["A3"] = "Category Breakdown"
+ws["A3"].font = Font(bold=True, size=14)
+
+# Headers for category analysis
+cat_headers = [
+    "Category",
+    "Amount (KES)",
+    "M-Pesa Fees",
+    "Total Cost",
+    "Budget %",
+    "Transaction Count",
+    "Avg per Transaction",
+    "% of Total",
+]
+for col, header in enumerate(cat_headers, 1):
+    cell = ws.cell(row=4, column=col, value=header)
+    cell.font = header_font
+    cell.fill = header_fill
+    cell.border = border
+
+# Category data from JSON
+category_data = data["category_summary"]
+total_project_cost = sum(cat["total_cost"] for cat in category_data)
+total_budget = data["project_info"]["total_budget"]
+
+for row, category in enumerate(category_data, 5):
+    ws.cell(row=row, column=1, value=category["category"]).border = border
+    ws.cell(row=row, column=2, value=category["amount"]).border = border
+    ws.cell(row=row, column=3, value=category["mpesa_fee"]).border = border
+    ws.cell(row=row, column=4, value=category["total_cost"]).border = border
+
+    # Budget percentage
+    budget_pct = (category["total_cost"] / total_budget) * 100
+    ws.cell(row=row, column=5, value=f"{budget_pct:.2f}%").border = border
+
+    # Transaction count (count expenses for this category)
+    cat_transactions = [
+        exp for exp in data["daily_expenses"] if exp["category"] == category["category"]
+    ]
+    trans_count = len(cat_transactions)
+    ws.cell(row=row, column=6, value=trans_count).border = border
+
+    # Average per transaction
+    avg_per_trans = category["amount"] / trans_count if trans_count > 0 else 0
+    ws.cell(row=row, column=7, value=f"{avg_per_trans:.0f}").border = border
+
+    # Percentage of total project
+    pct_of_total = (category["total_cost"] / total_project_cost) * 100
+    ws.cell(row=row, column=8, value=f"{pct_of_total:.1f}%").border = border
+
+# Add totals row
+total_row = len(category_data) + 5
+ws.cell(row=total_row, column=1, value="TOTAL").font = Font(bold=True)
+ws.cell(row=total_row, column=1).border = border
+ws.cell(
+    row=total_row, column=2, value=sum(cat["amount"] for cat in category_data)
+).border = border
+ws.cell(
+    row=total_row, column=3, value=sum(cat["mpesa_fee"] for cat in category_data)
+).border = border
+ws.cell(
+    row=total_row, column=4, value=sum(cat["total_cost"] for cat in category_data)
+).border = border
+ws.cell(row=total_row, column=5, value="100.00%").border = border
+ws.cell(row=total_row, column=6, value=len(data["daily_expenses"])).border = border
+ws.cell(row=total_row, column=7, value="").border = border
+ws.cell(row=total_row, column=8, value="100.0%").border = border
+
+# Summary statistics
+ws[f"A{total_row + 3}"] = "CATEGORY INSIGHTS"
+ws[f"A{total_row + 3}"].font = Font(bold=True, size=14)
+
+ws[f"A{total_row + 5}"] = f"Top Category: {category_data[0]['category']}"
+ws[f"A{total_row + 6}"] = f"Top Category Amount: KES {category_data[0]['total_cost']:,}"
+ws[f"A{total_row + 7}"] = (
+    f"Top Category % of Budget: {(category_data[0]['total_cost'] / total_budget) * 100:.1f}%"
+)
+ws[f"A{total_row + 8}"] = f"Total Categories: {len(category_data)}"
+ws[f"A{total_row + 9}"] = (
+    f"Average per Category: KES {total_project_cost / len(category_data):,.0f}"
+)
+
+# Adjust column widths for category analysis
+for col in ["A", "B", "C", "D", "E", "F", "G", "H"]:
+    ws.column_dimensions[col].width = 18
+
 # === M-PESA FEES SHEET ===
 ws = mpesa_sheet
 
