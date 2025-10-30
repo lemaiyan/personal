@@ -9,9 +9,9 @@ def get_outstanding_balances():
     return [
         {
             "vendor": "Electrician",
-            "description": "Remaining balance for electrical work (8000 of 28000, paid 10000 on 12/10)",
-            "amount": 8000,
-            "due_date": "To be scheduled",
+            "description": "Electrical work fully paid (28000 total: 10000 on 12/10 + 8000 on 27/10)",
+            "amount": 0,
+            "due_date": "Completed",
         },
         {
             "vendor": "Plumber",
@@ -33,9 +33,9 @@ def get_outstanding_balances():
         },
         {
             "vendor": "Cabinet Specialist",
-            "description": "Original work paid (21300 total), additional cabinets added = 7500 remaining",
-            "amount": 7500,
-            "due_date": "To be scheduled",
+            "description": "All cabinet work fully paid (21300 original + 7500 additional = 28800 total)",
+            "amount": 0,
+            "due_date": "Completed",
         },
         {
             "vendor": "Tile Fixer",
